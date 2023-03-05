@@ -1,10 +1,10 @@
 const asyncHandler = require("express-async-handler");
-const Product = require("../models/productModel");
+const Casal = require("../models/casalModel");
 const { fileSizeFormatter } = require("../utils/fileUpload");
 const cloudinary = require("cloudinary").v2;
 
 // Create Prouct
-const createProduct = asyncHandler(async (req, res) => {
+const createCasal = asyncHandler(async (req, res) => {
   const { name, sku, category, quantity, price, description } = req.body;
 
   //   Validation
@@ -36,8 +36,8 @@ const createProduct = asyncHandler(async (req, res) => {
     };
   }
 
-  // Create Product
-  const product = await Product.create({
+  // Create Casal
+  const casal = await Casal.create({
     user: req.user.id,
     name,
     sku,
@@ -48,62 +48,62 @@ const createProduct = asyncHandler(async (req, res) => {
     image: fileData,
   });
 
-  res.status(201).json(product);
+  res.status(201).json(casal);
 });
 
-// Get all Products
-const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({ user: req.user.id }).sort("-createdAt");
-  res.status(200).json(products);
+// Get all Casals
+const getCasais = asyncHandler(async (req, res) => {
+  const casais = await Casal.find({ user: req.user.id }).sort("-createdAt");
+  res.status(200).json(casais);
 });
 
-// Get single product
-const getProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
-  // if product doesnt exist
-  if (!product) {
+// Get single Casal
+const getCasal = asyncHandler(async (req, res) => {
+  const casal = await Casal.findById(req.params.id);
+  // if Casal doesnt exist
+  if (!casal) {
     res.status(404);
-    throw new Error("Product not found");
+    throw new Error("Casal not found");
   }
-  // Match product to its user
-  if (product.user.toString() !== req.user.id) {
+  // Match Casal to its user
+  if (casal.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error("User not authorized");
   }
-  res.status(200).json(product);
+  res.status(200).json(casal);
 });
 
-// Delete Product
-const deleteProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
-  // if product doesnt exist
-  if (!product) {
+// Delete Casal
+const deleteCasal = asyncHandler(async (req, res) => {
+  const casal = await Casal.findById(req.params.id);
+  // if Casal doesnt exist
+  if (!casal) {
     res.status(404);
-    throw new Error("Product not found");
+    throw new Error("Casal not found");
   }
-  // Match product to its user
-  if (product.user.toString() !== req.user.id) {
+  // Match Casal to its user
+  if (casal.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error("User not authorized");
   }
-  await product.remove();
-  res.status(200).json({ message: "Product deleted." });
+  await casal.remove();
+  res.status(200).json({ message: "Casal deleted." });
 });
 
-// Update Product
-const updateProduct = asyncHandler(async (req, res) => {
+// Update Casal
+const updateCasal = asyncHandler(async (req, res) => {
   const { name, category, quantity, price, description } = req.body;
   const { id } = req.params;
 
-  const product = await Product.findById(id);
+  const casal = await Casal.findById(id);
 
-  // if product doesnt exist
-  if (!product) {
+  // if Casal doesnt exist
+  if (!casal) {
     res.status(404);
-    throw new Error("Product not found");
+    throw new Error("Casal not found");
   }
-  // Match product to its user
-  if (product.user.toString() !== req.user.id) {
+  // Match Casal to its user
+  if (casal.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error("User not authorized");
   }
@@ -131,8 +131,8 @@ const updateProduct = asyncHandler(async (req, res) => {
     };
   }
 
-  // Update Product
-  const updatedProduct = await Product.findByIdAndUpdate(
+  // Update Casal
+  const updatedCasal = await Casal.findByIdAndUpdate(
     { _id: id },
     {
       name,
@@ -140,7 +140,7 @@ const updateProduct = asyncHandler(async (req, res) => {
       quantity,
       price,
       description,
-      image: Object.keys(fileData).length === 0 ? product?.image : fileData,
+      image: Object.keys(fileData).length === 0 ? casal?.image : fileData,
     },
     {
       new: true,
@@ -148,13 +148,13 @@ const updateProduct = asyncHandler(async (req, res) => {
     }
   );
 
-  res.status(200).json(updatedProduct);
+  res.status(200).json(updatedCasal);
 });
 
 module.exports = {
-  createProduct,
-  getProducts,
-  getProduct,
-  deleteProduct,
-  updateProduct,
+  createCasal: createCasal,
+  getCasais: getCasais,
+  getCasal: getCasal,
+  deleteCasal: deleteCasal,
+  updateCasal: updateCasal,
 };
