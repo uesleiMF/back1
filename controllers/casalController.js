@@ -5,12 +5,12 @@ const cloudinary = require("cloudinary").v2;
 
 // Create Prouct
 const createCasal = asyncHandler(async (req, res) => {
-  const { name, sku, category, quantity, price, description } = req.body;
+  const { name, sku, category, quantity, price, description, date } = req.body;
 
   //   Validation
-  if (!name || !category || !quantity || !price || !description) {
+  if (!name || !category || !quantity || !price || !description || !date) {
     res.status(400);
-    throw new Error("Please fill in all fields");
+    throw new Error("Por favor preencha todos os campos");
   }
 
   // Handle Image upload
@@ -25,9 +25,8 @@ const createCasal = asyncHandler(async (req, res) => {
       });
     } catch (error) {
       res.status(500);
-      throw new Error("Image could nao be uploaded");
+      throw new Error("A imagem não pode ser carregada");
     }
-
     fileData = {
       fileName: req.file.originalname,
       filePath: uploadedFile.secure_url,
@@ -45,6 +44,7 @@ const createCasal = asyncHandler(async (req, res) => {
     quantity,
     price,
     description,
+    date,
     image: fileData,
   });
 
@@ -63,12 +63,12 @@ const getCasal = asyncHandler(async (req, res) => {
   // if Casal doesnt exist
   if (!casal) {
     res.status(404);
-    throw new Error("Casal not found");
+    throw new Error("Casal não encontrado");
   }
   // Match Casal to its user
   if (casal.user.toString() !== req.user.id) {
     res.status(401);
-    throw new Error("User not authorized");
+    throw new Error("Usuario não autorizado");
   }
   res.status(200).json(casal);
 });
@@ -79,20 +79,20 @@ const deleteCasal = asyncHandler(async (req, res) => {
   // if Casal doesnt exist
   if (!casal) {
     res.status(404);
-    throw new Error("Casal not found");
+    throw new Error("Casal não encontrado");
   }
   // Match Casal to its user
   if (casal.user.toString() !== req.user.id) {
     res.status(401);
-    throw new Error("User not authorized");
+    throw new Error("Usuario não autorizado");
   }
   await casal.remove();
-  res.status(200).json({ message: "Casal deleted." });
+  res.status(200).json({ message: "Casal deletado." });
 });
 
 // Update Casal
 const updateCasal = asyncHandler(async (req, res) => {
-  const { name, category, quantity, price, description } = req.body;
+  const { name, category, quantity, price, date, description } = req.body;
   const { id } = req.params;
 
   const casal = await Casal.findById(id);
@@ -100,12 +100,12 @@ const updateCasal = asyncHandler(async (req, res) => {
   // if Casal doesnt exist
   if (!casal) {
     res.status(404);
-    throw new Error("Casal not found");
+    throw new Error("Casal não encontrado");
   }
   // Match Casal to its user
   if (casal.user.toString() !== req.user.id) {
     res.status(401);
-    throw new Error("User not authorized");
+    throw new Error("Usuario não autorizado");
   }
 
   // Handle Image upload
@@ -120,7 +120,7 @@ const updateCasal = asyncHandler(async (req, res) => {
       });
     } catch (error) {
       res.status(500);
-      throw new Error("Imagem could not be uploaded");
+      throw new Error("A imagem não pôde ser carregada");
     }
 
     fileData = {
@@ -140,6 +140,7 @@ const updateCasal = asyncHandler(async (req, res) => {
       quantity,
       price,
       description,
+      date,
       image: Object.keys(fileData).length === 0 ? casal?.image : fileData,
     },
     {

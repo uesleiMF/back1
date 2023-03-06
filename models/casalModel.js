@@ -9,7 +9,7 @@ const casalSchema = mongoose.Schema(
     },
     name: {
       type: String,
-      required: [true, "Please add a name"],
+      required: [true, "Por favor, adicione um nome"],
       trim: true,
     },
     sku: {
@@ -20,24 +20,30 @@ const casalSchema = mongoose.Schema(
     },
     category: {
       type: String,
-      required: [true, "Please add a category"],
+      required: [true, "Adicione um cargo"],
       trim: true,
     },
     quantity: {
       type: String,
-      required: [true, "Please add a quantity"],
+      required: [true, "Adicione uma quantidade"],
       trim: true,
     },
     price: {
       type: String,
-      required: [true, "Please add a price"],
+      required: [true, "Adicione um valor"],
       trim: true,
     },
     description: {
       type: String,
-      required: [true, "Please add a description"],
+      required: [true, "Por favor, adicione uma descrição"],
       trim: true,
     },
+  
+  date: {
+    type: String,
+    required: [true, "Por favor, adicione a data"],
+    trim: true,
+  },
     image: {
       type: Object,
       default: {},
