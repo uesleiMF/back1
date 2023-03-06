@@ -18,11 +18,11 @@ const registerUser = asyncHandler(async (req, res) => {
   // Validation
   if (!name || !email || !password) {
     res.status(400);
-    throw new Error("Please fill in all required fields");
+    throw new Error("Por favor, preencha todos os campos requisitados");
   }
   if (password.length < 6) {
     res.status(400);
-    throw new Error("Password must be up to 6 characters");
+    throw new Error("A senha deve ter até 6 caracteres");
   }
 
   // Check if user email already exists
@@ -30,7 +30,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   if (userExists) {
     res.status(400);
-    throw new Error("Email has already been registered");
+    throw new Error("O e-mail já foi cadastrado");
   }
 
   // Create new user
@@ -65,7 +65,7 @@ const registerUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error("Invalid user data");
+    throw new Error("Dados de usuário inválidos");
   }
 });
 
@@ -76,7 +76,7 @@ const loginUser = asyncHandler(async (req, res) => {
   // Validate Request
   if (!email || !password) {
     res.status(400);
-    throw new Error("Please add email and password");
+    throw new Error("Por favor, adicione e-mail e senha");
   }
 
   // Check if user exists
@@ -84,7 +84,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
   if (!user) {
     res.status(400);
-    throw new Error("User not found, please signup");
+    throw new Error("Usuário não encontrado, por favor cadastre-se");
   }
 
   // User exists, check if password is correct
@@ -116,7 +116,7 @@ const loginUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error("Invalid email or password");
+    throw new Error("E-mail ou senha inválidos");
   }
 });
 
@@ -129,7 +129,7 @@ const logout = asyncHandler(async (req, res) => {
     sameSite: "none",
     secure: true,
   });
-  return res.status(200).json({ message: "Successfully Logged Out" });
+  return res.status(200).json({ message: "Desconectado com sucesso" });
 });
 
 // Get User Data
@@ -148,7 +148,7 @@ const getUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error("User Not Found");
+    throw new Error("Usuário não encontrado");
   }
 });
 
@@ -189,7 +189,7 @@ const updateUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error("User not found");
+    throw new Error("Usuário não encontrado");
   }
 });
 
@@ -199,12 +199,12 @@ const changePassword = asyncHandler(async (req, res) => {
 
   if (!user) {
     res.status(400);
-    throw new Error("User not found, please signup");
+    throw new Error("Usuário não encontrado, por favor cadastre-se");
   }
   //Validate
   if (!oldPassword || !password) {
     res.status(400);
-    throw new Error("Please add old and new password");
+    throw new Error("Adicione a senha antiga e a nova");
   }
 
   // check if old password matches password in DB
@@ -214,10 +214,10 @@ const changePassword = asyncHandler(async (req, res) => {
   if (user && passwordIsCorrect) {
     user.password = password;
     await user.save();
-    res.status(200).send("Password change successful");
+    res.status(200).send("Alteração de senha bem-sucedida");
   } else {
     res.status(400);
-    throw new Error("Old password is incorrect");
+    throw new Error("A senha antiga é incorreta");
   }
 });
 
@@ -227,7 +227,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
 
   if (!user) {
     res.status(404);
-    throw new Error("User does not exist");
+    throw new Error("Usuário não existe");
   }
 
   // Delete token if it exists in DB
@@ -259,25 +259,25 @@ const forgotPassword = asyncHandler(async (req, res) => {
 
   // Reset Email
   const message = `
-      <h2>Hello ${user.name}</h2>
-      <p>Please use the url below to reset your password</p>  
-      <p>This reset link is valid for only 30minutes.</p>
+      <h2>Olá ${user.name}</h2>
+      <p>Por favor, use o url abaixo para redefinir sua senha</p>  
+      <p>Este link de redefinição é válido por apenas 30 minutos.</p>
 
       <a href=${resetUrl} clicktracking=off>${resetUrl}</a>
 
-      <p>Regards...</p>
-      <p>Pinvent Team</p>
+      <p>Cumprimentos...</p>
+      <p>Rede Amai</p>
     `;
-  const subject = "Password Reset Request";
+  const subject = "Solicitação de redefinição de senha";
   const send_to = user.email;
   const sent_from = process.env.EMAIL_USER;
 
   try {
     await sendEmail(subject, message, send_to, sent_from);
-    res.status(200).json({ success: true, message: "Reset Email Sent" });
+    res.status(200).json({ success: true, message: "Redefinir e-mail enviado" });
   } catch (error) {
     res.status(500);
-    throw new Error("Email not sent, please try again");
+    throw new Error("E-mail não enviado, tente novamente");
   }
 });
 
@@ -300,7 +300,7 @@ const resetPassword = asyncHandler(async (req, res) => {
 
   if (!userToken) {
     res.status(404);
-    throw new Error("Invalid or Expired Token");
+    throw new Error("Token inválido ou expirado");
   }
 
   // Find user
@@ -308,7 +308,7 @@ const resetPassword = asyncHandler(async (req, res) => {
   user.password = password;
   await user.save();
   res.status(200).json({
-    message: "Password Reset Successful, Please Login",
+    message: "Redefinição de senha bem-sucedida, faça o login",
   });
 });
 

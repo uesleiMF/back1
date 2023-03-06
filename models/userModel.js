@@ -5,37 +5,37 @@ const userSchema = mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "Please add a name"],
+      required: [true, "Adicione um nome"],
     },
     email: {
       type: String,
-      required: [true, "Please add a email"],
+      required: [true, "Adicione um email"],
       unique: true,
       trim: true,
       match: [
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        "Please enter a valid emaial",
+        "Por favor insira um e-mail válido",
       ],
     },
     password: {
       type: String,
-      required: [true, "Please add a password"],
-      minLength: [6, "Password must be up to 6 characters"],
+      required: [true, "Adicione uma senha"],
+      minLength: [6, "A senha deve ter até 6 caracteres"],
       //   maxLength: [23, "Password must not be more than 23 characters"],
     },
     photo: {
       type: String,
-      required: [true, "Please add a photo"],
+      required: [true, "Adicione uma Foto"],
       default: "https://i.ibb.co/4pDNDk1/avatar.png",
     },
     phone: {
       type: String,
-      default: "+234",
+      default: "+55",
     },
     bio: {
       type: String,
-      maxLength: [250, "Bio must not be more than 250 characteres"],
-      default: "grasfia",
+      maxLength: [350, "A biografia não deve ter mais de 350 caracteres"],
+      default: "biografia",
     },
   },
   {
