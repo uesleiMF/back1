@@ -9,7 +9,7 @@ const casalSchema = mongoose.Schema(
     },
     name: {
       type: String,
-      required: [true, "Por favor, adicione um nome"],
+      required: [true, "Por favor, adicione o nome"],
       trim: true,
     },
     sku: {
